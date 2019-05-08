@@ -26,7 +26,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:handle', async (req, res, next) => {
   try {
     let company = await Company.findACompany(req.params.handle);
-    return res.status(200).json({ company });
+    return res.json({ company });
   }
   catch (err) {
     return next(err);
@@ -40,7 +40,7 @@ router.post('/', async (req, res, next) => {
     const result = jsonschema.validate(req.body, companySchema);
 
     if (!result.valid) {
-      throw new ExpressError(result.errors[0].message, 400);
+      throw new ExpressError(result.errors.map(err => err.message), 400);
     }
 
     const company = await Company.create(req.body.company);
@@ -56,14 +56,14 @@ router.patch('/:handle', async (req, res, next) => {
   try {
     const result = jsonschema.validate(req.body, companyUpdateSchema);
 
-    if(!result.valid) {
-      throw new ExpressError(result.errors[0].message, 400);
+    if (!result.valid) {
+      throw new ExpressError(result.errors.map(err => err.message), 400);
     }
 
     const company = await Company.update(req.params.handle, req.body.company);
-    return res.status(202).json({company});
+    return res.status(202).json({ company });
   }
-  catch(err) {
+  catch (err) {
     return next(err);
   }
 });
@@ -72,8 +72,8 @@ router.patch('/:handle', async (req, res, next) => {
 router.delete('/:handle', async (req, res, next) => {
   try {
     await Company.remove(req.params.handle);
-    return res.status(200).json({message: "Company deleted"});
-  } 
+    return res.json({ message: "Company deleted" });
+  }
   catch (err) {
     return next(err);
   }

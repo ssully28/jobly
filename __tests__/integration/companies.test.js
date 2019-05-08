@@ -34,6 +34,32 @@ describe('READ', () => {
     const res = await request(app).get('/companies');
     expect(res.statusCode).toBe(200);
     expect(res.body.companies).toHaveLength(1);
+    expect(res.body.companies[0].handle).toEqual('goog');
+    expect(res.body.companies[0].name).toEqual('Google');
+  });
+  test('GET /companies with query string returns correct companies', async () => {
+    const res = await request(app).get('/companies?search=goog');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.companies).toHaveLength(1);
+  });
+  test('GET /companies with multiple query string returns correct companies', async () => {
+    const res = await request(app).get('/companies?search=goog&min_employees=50000');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.companies).toHaveLength(1);
+  });
+  test('GET /companies with multiple query string returns correct companies', async () => {
+    const res = await request(app).get('/companies?search=goog&max_employees=500');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.companies).toHaveLength(0);
+  });
+  test('GET /companies/handle returns a company', async () => {
+    const res = await request(app).get('/companies/goog');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.company.name).toEqual('Google');
+  });
+  test('GET /companies/handle 404 for bad company', async () => {
+    const res = await request(app).get('/companies/taco');
+    expect(res.statusCode).toBe(404);
   });
 });
 
@@ -97,9 +123,11 @@ describe('DELETE', () => {
     expect(beforeRes.statusCode).toBe(200);
     expect(beforeRes.body.companies).toHaveLength(1); 
     
+    // Do the DELETE:
     const res = await request(app).delete('/companies/goog');
     expect(res.statusCode).toBe(200);
 
+    // Check After DELETE:
     const afterRes = await request(app).get('/companies');
     expect(afterRes.statusCode).toBe(200);
     expect(afterRes.body.companies).toHaveLength(0); 

@@ -1,5 +1,6 @@
 const db = require("../db");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
+const ExpressError = require("../helpers/expressError");
 
 class Company {
 
@@ -17,7 +18,8 @@ class Company {
     );
 
     if (companyRes.rows.length === 0) {
-      throw { message: `There is no company with handle ${handle}`, status: 404 }
+      
+      throw new ExpressError(`There is no company with handle ${handle}`, 404);
     }
     return companyRes.rows[0];
   }
@@ -59,7 +61,7 @@ class Company {
     const result = await db.query(query, values);
 
     if (result.rows.length === 0) {
-      throw { message: `There is no company with handle ${handle}`, status: 404 }
+      throw new ExpressError(`There is no company with handle ${handle}`, 404);
     }
 
     return result.rows[0];
@@ -73,9 +75,9 @@ class Company {
     `, [handle]);
 
     if (result.rows.length === 0) {
-      throw { message: `There is no company with handle ${handle}`, status: 404 }
+      throw new ExpressError(`There is no company with handle ${handle}`, 404);
     }
-    
+
     return;
   }
 }
