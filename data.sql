@@ -1,7 +1,16 @@
-
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS jobs;
 DROP TABLE IF EXISTS companies;
 
+CREATE TABLE users (
+username TEXT PRIMARY KEY,
+password TEXT NOT NULL,
+first_name TEXT NOT NULL,
+last_name TEXT NOT NULL,
+email TEXT NOT NULL UNIQUE,
+photo_url TEXT,
+is_admin BOOLEAN NOT NULL DEFAULT 'f'
+);
 
 CREATE TABLE companies (
   handle TEXT PRIMARY KEY,

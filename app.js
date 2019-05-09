@@ -12,9 +12,12 @@ app.use(express.json());
 // add logging system
 app.use(morgan("tiny"));
 
-
+// route trees below
 app.use("/companies", require("./routes/companies"));
 app.use("/jobs", require("./routes/jobs"));
+app.use("/users", require("./routes/users"));
+
+app.use("/login", require("./routes/login"));
 
 /** 404 handler */
 
