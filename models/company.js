@@ -1,6 +1,7 @@
 const db = require("../db");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
 const ExpressError = require("../helpers/expressError");
+const Job = require("./job");
 
 class Company {
 
@@ -21,6 +22,10 @@ class Company {
       
       throw new ExpressError(`There is no company with handle ${handle}`, 404);
     }
+
+    const jobs = await Job.find({"handle_search":handle});
+    companyRes.rows[0].jobs = jobs;
+
     return companyRes.rows[0];
   }
 

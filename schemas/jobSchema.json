@@ -1,0 +1,74 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "job"
+  ],
+  "properties": {
+    "job": {
+      "$id": "#/properties/job",
+      "type": "object",
+      "title": "The Job Schema",
+      "required": [
+        "title",
+        "salary",
+        "equity",
+        "description",
+        "company_handle"
+      ],
+      "properties": {
+        "title": {
+          "$id": "#/properties/job/properties/title",
+          "type": "string",
+          "title": "The Title Schema",
+          "default": "",
+          "examples": [
+            "software engineer"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "salary": {
+          "$id": "#/properties/job/properties/salary",
+          "type": "integer",
+          "title": "The Salary Schema",
+          "default": 0,
+          "examples": [
+            115000
+          ]
+        },
+        "equity": {
+          "$id": "#/properties/job/properties/equity",
+          "type": "number",
+          "title": "The Equity Schema",
+          "default": 0.0,
+          "examples": [
+            1e-05
+          ]
+        },
+        "description": {
+          "$id": "#/properties/job/properties/description",
+          "type": "string",
+          "title": "The Description Schema",
+          "default": "",
+          "examples": [
+            "free lunches and getting yelled at"
+          ],
+          "pattern": "^(.*)$"
+        },
+        "company_handle": {
+          "$id": "#/properties/job/properties/company_handle",
+          "type": "string",
+          "title": "The Company_handle Schema",
+          "default": "",
+          "examples": [
+            "amzn"
+          ],
+          "pattern": "^(.*)$"
+        }
+      }
+    }
+  }
+}
