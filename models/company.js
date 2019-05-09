@@ -23,7 +23,7 @@ class Company {
       throw new ExpressError(`There is no company with handle ${handle}`, 404);
     }
 
-    const jobs = await Job.find({"handle_search":handle});
+    const jobs = await Job.find({"handleSearch":handle});
     companyRes.rows[0].jobs = jobs;
 
     return companyRes.rows[0];

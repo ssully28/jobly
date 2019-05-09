@@ -41,16 +41,6 @@
             1e-05
           ]
         },
-        "description": {
-          "$id": "#/properties/job/properties/description",
-          "type": "string",
-          "title": "The Description Schema",
-          "default": "",
-          "examples": [
-            "free lunches and getting yelled at"
-          ],
-          "pattern": "^(.*)$"
-        },
         "company_handle": {
           "$id": "#/properties/job/properties/company_handle",
           "type": "string",

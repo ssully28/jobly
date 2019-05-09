@@ -11,8 +11,8 @@ const ExpressError = require("../helpers/expressError");
 router.get('/', async (req, res, next) => {
   try {
     // Any query string params:
-    let { search, min_salary, min_equity } = req.query;
-    let jobs = await Job.find({ search, min_salary, min_equity });
+    let { search, minSalary, minEquity } = req.query;
+    let jobs = await Job.find({ search, minSalary, minEquity });
 
     return res.json({ jobs });
   }
@@ -25,8 +25,13 @@ router.get('/', async (req, res, next) => {
 /** GET /jobs/:id => Get a specific job by id */
 router.get('/:id', async (req, res, next) => {
   try {
-    let job = await Job.findAJob(req.params.id);
-    return res.json({ job });
+    if (+req.params.id) {
+      let job = await Job.findAJob(req.params.id);
+      return res.json({ job });
+    }
+    else {
+      throw new ExpressError("Invalid input", 404)
+    }
   }
   catch (err) {
     return next(err);
@@ -60,7 +65,7 @@ router.patch('/:id', async (req, res, next) => {
     }
 
     let job = await Job.update(req.params.id, req.body.job);
-    return res.status(202).json({job});
+    return res.json({ job });
   }
   catch (err) {
     return next(err);
