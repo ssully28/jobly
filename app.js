@@ -14,6 +14,7 @@ app.use(morgan("tiny"));
 
 
 app.use("/companies", require("./routes/companies"));
+app.use("/jobs", require("./routes/jobs"));
 
 /** 404 handler */
 
