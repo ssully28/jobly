@@ -5,10 +5,10 @@ const jsonschema = require("jsonschema");
 const jobSchema = require("../schemas/jobSchema.json");
 const jobUpdateSchema = require("../schemas/jobUpdateSchema.json");
 const ExpressError = require("../helpers/expressError");
-
+const { authenticateJWT, ensureLoggedIn } = require("../middleware/auth");
 
 /** GET /jobs => Get all jobs, or by filters */
-router.get('/', async (req, res, next) => {
+router.get('/', authenticateJWT, ensureLoggedIn, async (req, res, next) => {
   try {
     // Any query string params:
     let { search, minSalary, minEquity } = req.query;

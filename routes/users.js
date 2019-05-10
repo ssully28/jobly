@@ -44,11 +44,11 @@ router.post('/', async (req, res, next) => {
     let user = await User.create(req.body.user, hashedPassword);
 
     return res.status(201).json({ user });
-  } 
+  }
   catch (err) {
     return next(err);
   }
-})
+});
 
 /** PATCH /users/:username => Update a specific user by username */
 router.patch('/:username', async (req, res, next) => {

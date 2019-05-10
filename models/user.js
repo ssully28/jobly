@@ -1,7 +1,7 @@
 const db = require("../db");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
 const ExpressError = require("../helpers/expressError");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 
 class User {
 
@@ -14,11 +14,11 @@ class User {
       WHERE
         username = $1
       `,
-      [username]
+    [username]
     );
 
     if (userRes.rows.length === 0) {
-      
+
       throw new ExpressError(`There is no user with username: ${username}`, 404);
     }
 
@@ -38,20 +38,21 @@ class User {
 
   static async create(data, password) {
 
-    //to-do fix through 58
+    let hashedPassword = await bcrypt.hash(password, 10);
+
     const result = await db.query(`
       INSERT INTO users (
        username, password, first_name, last_name, email, photo_url, is_admin
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7)
-      RETURNING username, password, first_name, last_name, email, photo_url, is_admin
-    `, [ data.username, password, data.first_name, data.last_name, data.email, data.photo_url, data.is_admin]);
+      RETURNING username, first_name, last_name, email, photo_url, is_admin
+    `, [data.username, hashedPassword, data.first_name, data.last_name, data.email, data.photo_url, data.is_admin]);
 
     return result.rows[0];
   }
 
-  static async update (username, data) {
-    let {query, values} = sqlForPartialUpdate('users', data, 'username', username);
+  static async update(username, data) {
+    let { query, values } = sqlForPartialUpdate('users', data, 'username', username);
 
     const result = await db.query(query, values);
 
@@ -62,7 +63,7 @@ class User {
     return result.rows[0];
   }
 
-  static async remove (username) {
+  static async remove(username) {
     const result = await db.query(`
       DELETE FROM users
       WHERE username = $1
@@ -76,15 +77,16 @@ class User {
     return;
   }
 
-  static async authenticate (username, password) {
+  static async authenticate(username, password) {
     const result = await db.query(
       `
       SELECT password
       FROM users
       WHERE username = $1
       `
-      ,[username]
-    )
+      , [username]
+    );
+
     let user = result.rows[0];
 
     return user && await bcrypt.compare(password, user.password);
