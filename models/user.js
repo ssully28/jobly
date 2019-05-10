@@ -2,6 +2,8 @@ const db = require("../db");
 const sqlForPartialUpdate = require("../helpers/partialUpdate");
 const ExpressError = require("../helpers/expressError");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = require("../config");
 
 class User {
 
@@ -48,7 +50,10 @@ class User {
       RETURNING username, first_name, last_name, email, photo_url, is_admin
     `, [data.username, hashedPassword, data.first_name, data.last_name, data.email, data.photo_url, data.is_admin]);
 
-    return result.rows[0];
+    let { username, is_admin } = result.rows[0];
+    let token = jwt.sign({ username, is_admin }, SECRET_KEY, {});
+
+    return { "token": token, "user": result.rows[0] };
   }
 
   static async update(username, data) {

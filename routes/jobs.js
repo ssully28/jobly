@@ -23,14 +23,14 @@ router.get('/', authenticateJWT, ensureLoggedIn, async (req, res, next) => {
 });
 
 /** GET /jobs/:id => Get a specific job by id */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', authenticateJWT, async (req, res, next) => {
   try {
     if (+req.params.id) {
       let job = await Job.findAJob(req.params.id);
       return res.json({ job });
     }
     else {
-      throw new ExpressError("Invalid input", 404)
+      throw new ExpressError("Invalid input", 404);
     }
   }
   catch (err) {
@@ -53,7 +53,7 @@ router.post('/', async (req, res, next) => {
   catch (err) {
     return next(err);
   }
-})
+});
 
 /** PATCH /jobs/:id => Update a specific job by id */
 router.patch('/:id', async (req, res, next) => {

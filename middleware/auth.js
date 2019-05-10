@@ -4,11 +4,10 @@ const ExpressError = require("../helpers/expressError");
 
 function authenticateJWT(req, res, next) {
   try {
-    const username = req.body.username;
     const token = req.body._token;
     const payload = jwt.verify(token, SECRET_KEY);
     req.user = payload;
-    req.user.username = username;
+    
     return next();
   }
   catch (err) {

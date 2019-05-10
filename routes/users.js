@@ -5,7 +5,7 @@ const jsonschema = require("jsonschema");
 const userSchema = require("../schemas/userSchema");
 const userUpdateSchema = require("../schemas/userUpdateSchema");
 const ExpressError = require("../helpers/expressError");
-
+const { authenticateJWT, ensureCorrectUser } = require("../middleware/auth");
 
 /** GET /users => Get all users */
 router.get('/', async (req, res, next) => {
@@ -21,7 +21,7 @@ router.get('/', async (req, res, next) => {
 });
 
 /** GET /users/:username => Get a specific user by username */
-router.get('/:username', async (req, res, next) => {
+router.get('/:username', authenticateJWT, ensureCorrectUser, async (req, res, next) => {
   try {
     let user = await User.findAUser(req.params.username);
     return res.json({ user });
@@ -41,9 +41,9 @@ router.post('/', async (req, res, next) => {
     }
 
     let hashedPassword = req.body.user.password;
-    let user = await User.create(req.body.user, hashedPassword);
+    let token = await User.create(req.body.user, hashedPassword);
 
-    return res.status(201).json({ user });
+    return res.status(201).json({ token });
   }
   catch (err) {
     return next(err);
