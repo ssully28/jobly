@@ -38,8 +38,23 @@ function ensureCorrectUser(req, res, next) {
   }
 }
 
+function ensureAdmin(req, res, next) {
+  try {
+    if (req.user.is_admin === true) {
+      return next();
+    }
+    else {
+      throw new ExpressError("Unauthorized requires admin privledges", 401);
+    }
+  }
+  catch (err) {
+    return next(err);
+  }
+}
+
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
-  ensureCorrectUser
+  ensureCorrectUser,
+  ensureAdmin
 };

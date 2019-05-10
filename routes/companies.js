@@ -5,7 +5,7 @@ const Company = require('../models/company');
 const companySchema = require("../schemas/companySchema.json");
 const companyUpdateSchema = require("../schemas/companyUpdateSchema.json");
 const ExpressError = require("../helpers/expressError");
-const { authenticateJWT, ensureLoggedIn } = require("../middleware/auth");
+const { authenticateJWT, ensureAdmin } = require("../middleware/auth");
 
 
 /** GET /companies => Get all companies, or by filters */
@@ -35,7 +35,7 @@ router.get('/:handle', authenticateJWT, async (req, res, next) => {
 });
 
 /** POST /companies => Create new Company */
-router.post('/', async (req, res, next) => {
+router.post('/', authenticateJWT, ensureAdmin, async (req, res, next) => {
   try {
 
     const result = jsonschema.validate(req.body, companySchema);

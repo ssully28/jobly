@@ -10,7 +10,7 @@ class User {
   static async findAUser(username) {
     const userRes = await db.query(`
       SELECT
-        username, first_name, last_name, email, photo_url
+        username, first_name, last_name, email, photo_url, is_admin
       FROM
         users
       WHERE

@@ -11,7 +11,8 @@ router.post('/', async (req, res, next) => {
     let { username, password } = req.body;
 
     if (User.authenticate(username, password)) {
-      let token = jwt.sign(username, SECRET_KEY, {});
+      let { is_admin } = await User.findAUser(username);
+      let token = jwt.sign({ username, is_admin }, SECRET_KEY, {});
       return res.json({ token });
     }
     else {

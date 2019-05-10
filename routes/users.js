@@ -51,7 +51,7 @@ router.post('/', async (req, res, next) => {
 });
 
 /** PATCH /users/:username => Update a specific user by username */
-router.patch('/:username', async (req, res, next) => {
+router.patch('/:username', authenticateJWT, ensureCorrectUser,async (req, res, next) => {
   try {
     const result = jsonschema.validate(req.body, userUpdateSchema);
 
@@ -67,7 +67,7 @@ router.patch('/:username', async (req, res, next) => {
 });
 
 /** DELETE /users/:username => Delete a specific user by username */
-router.delete('/:username', async (req, res, next) => {
+router.delete('/:username', authenticateJWT, ensureCorrectUser,async (req, res, next) => {
   try {
     await User.remove(req.params.username);
     return res.json({ msg: "user deleted." });
